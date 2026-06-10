@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-brand-blue: #2563eb;
+  --color-brand-cyan: #06b6d4;
+  --color-brand-emerald: #10b981;
+  --color-brand-violet: #84cc16; /* Soft green-yellow accent or original violet keep */
+  --color-brand-rose: #f43f5e;
+}
+
+@layer base {
+  body {
+    background-color: #0a0b10;
+    color: #f3f4f6;
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  /* Custom high-performance thin scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0b10;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
+}
+
+/* Glassmorphism panel styles of Elegant Dark theme */
+.glass-panel {
+  background: #111218;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel-hover {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-panel-hover:hover {
+  background: #15161f;
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.85);
+  transform: translateY(-2px);
+}
+
+/* Custom glow borders for success/alert indicators */
+.glow-emerald {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.12);
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.18);
+}
+
+.glow-rose {
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.12);
+}
+
+/* Animation utilities */
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.9; }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+/* Elegant Dark Design Theme Fallback Class Overrides for Tailwind Escaped Selectors */
+.\bg-\[\#070b13\], .bg-\[\#070b13\] {
+  background-color: #0a0b10 !important;
+}
+
+.\bg-\[\#0b0f19\], .bg-\[\#0b0f19\] {
+  background-color: #111218 !important;
+}
+
+.\bg-\[\#0c1221\], .bg-\[\#0c1221\] {
+  background-color: #111218 !important;
+}
+
+.\bg-\[\#090d16\], .bg-\[\#090d16\] {
+  background-color: #0a0b10 !important;
+}
+
+.\bg-\[\#101726\]\/40, .bg-\[\#101726\]\/40 {
+  background-color: rgba(21, 22, 31, 0.45) !important;
+}
+
+.\bg-\[\#111622\], .bg-\[\#111622\] {
+  background-color: #161720 !important;
+}
+
+.\bg-\[\#111624\], .bg-\[\#111624\] {
+  background-color: #161720 !important;
+}
+
+.\bg-\[\#04060c\], .bg-\[\#04060c\] {
+  background-color: #05060b !important;
+}
+
+.\bg-\[\#04060b\], .bg-\[\#04060b\] {
+  background-color: #05060b !important;
+}
+
+.\bg-\[\#101420\]\/70, .bg-\[\#101420\]\/70 {
+  background-color: rgba(21, 22, 31, 0.7) !important;
+}
+
+.\bg-\[\#131d2f\]\/70, .bg-\[\#131d2f\]\/70 {
+  background-color: rgba(37, 99, 235, 0.08) !important;
+}
+
+.\bg-\[\#112423\]\/70, .bg-\[\#112423\]\/70 {
+  background-color: rgba(16, 185, 129, 0.08) !important;
+}
+
+.\bg-\[\#11192e\], .bg-\[\#11192e\] {
+  background-color: rgba(37, 99, 235, 0.06) !important;
+}
+
+.\border-slate-800, .border-slate-800 {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}

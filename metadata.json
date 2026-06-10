@@ -1,0 +1,6 @@
+{
+  "name": "EV Cyber Academy",
+  "description": "An interactive, premium training portal for the Cyber Security Starter Program 2026. Practical training, simulators, tasks, hackathons, and certifications.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
