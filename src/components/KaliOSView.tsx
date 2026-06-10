@@ -308,6 +308,71 @@ export default function KaliOSView({ onSyncProgress }: KaliOSViewProps) {
     }
   };
 
+  const resetLabInOS = (labId: number) => {
+    let completedLabs: number[] = [];
+    let currentXp = 0;
+    
+    const cachedProgress = localStorage.getItem('ev_cyber_academy_progress');
+    if (cachedProgress) {
+      try {
+        const parsed = JSON.parse(cachedProgress);
+        completedLabs = parsed.completedLabs || [];
+        currentXp = parsed.xp || 0;
+      } catch (e) {
+        console.error("Progress load error", e);
+      }
+    }
+    
+    completedLabs = completedLabs.filter(id => id !== labId);
+    const lab = LABS_DATA.find(l => l.id === labId);
+    const xpReward = lab ? lab.xpReward : 0;
+    currentXp = Math.max(0, currentXp - xpReward);
+    
+    const newProgress = {
+      completedLabs,
+      completedTasks: completedLabs.map(id => `lab_${id}`),
+      completedHackathonDays: [],
+      xp: currentXp
+    };
+    
+    localStorage.setItem('ev_cyber_academy_progress', JSON.stringify(newProgress));
+    setUserProgress(prev => ({
+      ...prev,
+      completedLabs,
+      xp: currentXp
+    }));
+    
+    let currentActivities = [];
+    const cachedActivities = localStorage.getItem('ev_cyber_academy_activities');
+    if (cachedActivities) {
+      try {
+        currentActivities = JSON.parse(cachedActivities);
+      } catch (e) {
+        console.error("Activities load error", e);
+      }
+    }
+    
+    const newActivity = {
+      id: `act_${Date.now()}`,
+      type: 'redeploy' as any,
+      label: `Redeployed Lab ${labId} for Repractice`,
+      timestamp: 'Just now',
+      xp: 0
+    };
+    
+    currentActivities = [newActivity, ...currentActivities].filter((item, index, self) =>
+      index === self.findIndex((t) => t.id === item.id || t.label === item.label)
+    );
+    
+    localStorage.setItem('ev_cyber_academy_activities', JSON.stringify(currentActivities));
+    
+    if (onSyncProgress) {
+      onSyncProgress(completedLabs, currentXp);
+    }
+    
+    alert(`🔐 Lab ${labId} has been redeployed successfully in the simulated OS workspace!\nYour progress has been refreshed.`);
+  };
+
   const focusWindow = (id: string) => {
     setActiveWindowId(id);
     const nextZ = topZ + 1;
@@ -1578,8 +1643,22 @@ export default function KaliOSView({ onSyncProgress }: KaliOSViewProps) {
                               }`}>{currentLab.difficulty}</span>
                             </div>
                           </div>
-                          <div className="px-3.5 py-1.5 bg-[#9fef00]/10 border border-[#9fef00]/25 rounded-lg text-center">
-                            <span className="text-[11px] text-[#9fef00] font-black uppercase tracking-widest font-mono">+{currentLab.xpReward} XP</span>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <button
+                              onClick={() => {
+                                if (window.confirm(`Are you sure you want to redeploy Lab ${currentLab.id} ("${currentLab.title}")? This will reset your progress and let you solve it again from scratch.`)) {
+                                  resetLabInOS(currentLab.id);
+                                }
+                              }}
+                              className="px-2.5 py-1.5 bg-brand-rose/10 hover:bg-brand-rose/25 text-brand-rose border border-brand-rose/20 hover:border-brand-rose/40 rounded-lg font-bold text-[10px] cursor-pointer flex items-center gap-1 transition-all uppercase tracking-wider"
+                              title="Redeploy / Reset lab simulator progress"
+                            >
+                              <RefreshCw className="w-3 h-3 shrink-0" />
+                              Redeploy
+                            </button>
+                            <div className="px-3.5 py-1.5 bg-[#9fef00]/10 border border-[#9fef00]/25 rounded-lg text-center">
+                              <span className="text-[11px] text-[#9fef00] font-black uppercase tracking-widest font-mono">+{currentLab.xpReward} XP</span>
+                            </div>
                           </div>
                         </div>
 
@@ -1697,17 +1776,14 @@ export default function KaliOSView({ onSyncProgress }: KaliOSViewProps) {
                                 </div>
                               )}
 
-                              <div className="bg-[#0c1412] border border-brand-emerald/20 rounded-xl p-3.5 flex justify-between items-center gap-2">
-                                <div className="space-y-0.5">
-                                  <span className="text-[9px] text-slate-500 uppercase font-bold tracking-wide block">Validation Flag Buffer:</span>
-                                  <span className="text-xs font-mono font-black text-brand-emerald select-all break-all">{solution ? solution.expectedFlag : currentLab.flag}</span>
+                              <div className="bg-[#12141a]/95 border border-brand-cyan/15 rounded-xl p-3.5 flex flex-col gap-2">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse shrink-0" />
+                                  <span className="text-[9px] uppercase tracking-wider text-slate-500 font-extrabold block">Pedagogical Learning Note</span>
                                 </div>
-                                <button 
-                                  onClick={() => copyToClipboard(solution ? solution.expectedFlag : currentLab.flag)}
-                                  className="px-2.5 py-1 bg-brand-emerald/10 hover:bg-brand-emerald/20 border border-brand-emerald/30 text-brand-emerald text-[9px] rounded shrink-0 font-bold cursor-pointer uppercase font-mono"
-                                >
-                                  Copy Flag
-                                </button>
+                                <p className="text-[11px] text-slate-350 leading-relaxed font-sans">
+                                  To reinforce cybersecurity proficiency, follow the targeted walkthrough instructions provided above on the live workspace shell or terminal panels. The unique token will print dynamically in prefix format <code className="text-brand-rose font-mono bg-black/40 px-1 py-0.5 rounded text-[10px]">EV{"{"}...{"}"}</code>. Keep scanning logs!
+                                </p>
                               </div>
                             </div>
                           );

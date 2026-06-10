@@ -467,9 +467,24 @@ export default function LabsView({
                     </span>
                   </div>
                 ) : (
-                  <span className="px-4 py-2 bg-slate-800/40 text-slate-400 border border-slate-700/50 rounded-xl font-bold text-xs">
-                    Pending Validation
-                  </span>
+                  <div className="flex items-center gap-2">
+                    {onResetLab && (
+                      <button
+                        onClick={() => {
+                          if (window.confirm(`Are you sure you want to redeploy Lab ${selectedLab.id} ("${selectedLab.title}")? This resets intermediate simulator states.`)) {
+                            onResetLab(selectedLab.id);
+                          }
+                        }}
+                        className="px-4 py-2 bg-white/5 hover:bg-brand-rose/10 text-slate-400 hover:text-brand-rose border border-transparent hover:border-brand-rose/20 rounded-xl font-bold text-xs cursor-pointer flex items-center gap-1.5 transition-all text-center uppercase tracking-wider text-[10px]"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5 shrink-0" />
+                        Redeploy / Reset
+                      </button>
+                    )}
+                    <span className="px-4 py-2 bg-slate-800/40 text-slate-400 border border-slate-700/50 rounded-xl font-bold text-xs">
+                      Pending Validation
+                    </span>
+                  </div>
                 )}
               </div>
             </div>
@@ -603,14 +618,14 @@ export default function LabsView({
                         </div>
                       )}
 
-                      <div className="glass-panel rounded-xl p-4 border border-brand-emerald/15 bg-[#0d1614]/60 flex items-center justify-between gap-3">
-                        <div className="space-y-0.5">
-                          <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold block">Target Clearance Token</span>
-                          <span className="text-xs font-mono font-bold text-white block">Copy and execute flag validation:</span>
+                      <div className="glass-panel rounded-xl p-4 border border-brand-blue/15 bg-[#0c1424]/60 flex flex-col gap-2">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse shrink-0" />
+                          <span className="text-[10px] uppercase tracking-wider text-slate-400 font-black">Pedagogical Lab Guideline</span>
                         </div>
-                        <div className="px-3 py-1.5 bg-brand-emerald/10 border border-brand-emerald/20 text-brand-emerald rounded-lg font-mono font-black text-[11px] select-all">
-                          {solution ? solution.expectedFlag : selectedLab.flag}
-                        </div>
+                        <p className="text-[11px] text-slate-300 leading-normal font-sans">
+                          For the best learning outcome, perform the highlighted interactive terminal and model commands outlined above to organically reveal the secret token in the simulator viewport. The correct key is formatted as <code className="text-brand-magenta font-mono font-bold bg-black/40 px-1 py-0.5 rounded text-[10px]">EV{"{"}...{"}"}</code>.
+                        </p>
                       </div>
                     </div>
                   );
